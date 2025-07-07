@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { runIdeaSpider } from '@agents/ideaSpider';
 
 
+
 export async function GET() {
   console.log('🚀 Scheduler triggered: Running IdeaSpider...')
   try {
