@@ -14,6 +14,7 @@ const METRICS: Record<number, { traffic: number; revenue: number; seoRank: numbe
   3: { traffic: 200, revenue: 100, seoRank: 1 },
 };
 
+
 export default function Home() {
   const [selected, setSelected] = useState(PRODUCTS[0].id);
 
