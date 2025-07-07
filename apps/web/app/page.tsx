@@ -8,12 +8,11 @@ const PRODUCTS = [
   { id: 3, name: "Product 3" },
 ];
 
-const METRICS: Record<number, { traffic: number; revenue: number; seoRank: number }> = {
+const METRICS: Record<string, { traffic: number; revenue: number; seoRank: number }> = {
   1: { traffic: 100, revenue: 200, seoRank: 3 },
   2: { traffic: 150, revenue: 150, seoRank: 2 },
   3: { traffic: 200, revenue: 100, seoRank: 1 },
 };
-
 
 export default function Home() {
   const [selected, setSelected] = useState(PRODUCTS[0].id);
@@ -24,7 +23,7 @@ export default function Home() {
 
   let lowest = PRODUCTS[0];
   PRODUCTS.forEach((p) => {
-    if (METRICS[p.id].revenue < METRICS[lowest.id].revenue) {
+    if (METRICS[String(p.id)].revenue < METRICS[String(lowest.id)].revenue) {
       lowest = p;
     }
   });
@@ -49,13 +48,13 @@ export default function Home() {
 
       <div className="border p-4 rounded bg-gray-100">
         <h2 className="text-xl font-semibold mb-2">Selected Product Metrics:</h2>
-        <p>Traffic: {METRICS[selected].traffic}</p>
-        <p>Revenue: {METRICS[selected].revenue}</p>
-        <p>SEO Rank: {METRICS[selected].seoRank}</p>
+        <p>Traffic: {METRICS[String(selected)].traffic}</p>
+        <p>Revenue: {METRICS[String(selected)].revenue}</p>
+        <p>SEO Rank: {METRICS[String(selected)].seoRank}</p>
       </div>
 
       <div className="mt-4 p-4 bg-green-100 rounded">
-        <p>Lowest Revenue Product: {lowest.name} (${METRICS[lowest.id].revenue})</p>
+        <p>Lowest Revenue Product: {lowest.name} (${METRICS[String(lowest.id)].revenue})</p>
       </div>
     </main>
   );
