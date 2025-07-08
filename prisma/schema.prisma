@@ -13,3 +13,29 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+  agentJobs AgentJob[]
+}
+
+model AgentJob {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  agentName String
+  status    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  logs      AgentLog[]
+}
+
+model AgentLog {
+  id        String   @id @default(cuid())
+  jobId     String
+  job       AgentJob @relation(fields: [jobId], references: [id])
+  message   String
+  createdAt DateTime @default(now())
+}

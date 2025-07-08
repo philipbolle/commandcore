@@ -9,6 +9,7 @@
     "dev": "pnpm --filter web dev"
   },
   "devDependencies": {
-    "@playwright/test": "^1.53.2"
+    "@playwright/test": "^1.53.2",
+    "prisma": "^6.11.1"
   }
 }
