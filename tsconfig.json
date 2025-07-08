@@ -12,7 +12,11 @@
     "skipLibCheck": true,
     "noEmit": true,
     "incremental": true,
-    "types": ["node"]
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@agents/*": ["packages/agents/*"]
+    }
   },
   "exclude": ["node_modules"],
   "include": ["apps", "packages"]
