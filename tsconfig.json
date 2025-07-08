@@ -1,18 +1,3 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "baseUrl": ".",
-    "paths": {
-      "@agents/*": ["packages/agents/*"]
-    }
-  },
-  "exclude": ["node_modules", "dist"],
-  "include": ["packages", "apps"]
+  "extends": "./apps/web/tsconfig.json"
 }
