@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { runIdeaSpider } from '@agents/ideaSpider'
+import { runIdeaSpider } from '../../../../lib/ideaSpider'
 
 
 
