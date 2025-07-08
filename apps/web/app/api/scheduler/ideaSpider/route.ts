@@ -6,7 +6,7 @@ import { runIdeaSpider } from '../../../../lib/ideaSpider';
 export async function GET() {
   console.log('🚀 Scheduler triggered: Running IdeaSpider...')
   try {
-    const output = await runIdeaSpider()
+    const output = await runIdeaSpider('Generate innovative business ideas and market opportunities')
     console.log('✅ IdeaSpider Output:', output)
 
     // Placeholder for saving output to a database in the future

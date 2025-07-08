@@ -6,7 +6,7 @@ import { runIdeaSpider } from '../../../../lib/ideaSpider'
 
 export async function GET() {
   try {
-    const report = await runIdeaSpider()
+    const report = await runIdeaSpider('Generate innovative business ideas and market opportunities')
     return NextResponse.json({ report })
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Unknown error' }, { status: 500 })
