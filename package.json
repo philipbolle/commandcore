@@ -1,15 +1,25 @@
 {
-  "name": "commandcore-root",
+  "name": "commandcore",
   "private": true,
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "scripts": {
-    "dev": "pnpm --filter web dev"
+    "dev": "pnpm -r dev",
+    "dev:web": "pnpm --filter web dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test"
   },
   "devDependencies": {
     "@playwright/test": "^1.53.2",
+    "@prisma/client": "^6.11.1",
+    "@types/node": "^24.0.12",
+    "eslint": "^8.57.0",
     "prisma": "^6.11.1"
+  },
+  "dependencies": {
+    "openai": "^5.8.3"
   }
 }

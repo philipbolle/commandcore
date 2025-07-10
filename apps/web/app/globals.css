@@ -1,18 +1,118 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind variants;
 
-/* Optional: Add these for clean smooth visuals */
+@theme {
+  --color-background: oklch(1 0 0);
+  --color-foreground: oklch(0.0787 0.0328 263.32);
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: oklch(0.0787 0.0328 263.32);
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: oklch(0.0787 0.0328 263.32);
+  --color-primary: oklch(0.5583 0.2296 262.24);
+  --color-primary-foreground: oklch(0.9804 0.0074 235.56);
+  --color-secondary: oklch(0.6549 0.2481 289.03);
+  --color-secondary-foreground: oklch(0.1216 0.0142 263.32);
+  --color-muted: oklch(0.9607 0.0074 235.56);
+  --color-muted-foreground: oklch(0.4696 0.0237 255.76);
+  --color-accent: oklch(0.9607 0.0074 235.56);
+  --color-accent-foreground: oklch(0.1216 0.0142 263.32);
+  --color-destructive: oklch(0.6118 0.2187 22.18);
+  --color-destructive-foreground: oklch(0.9804 0.0074 235.56);
+  --color-border: oklch(0.9155 0.0298 254.56);
+  --color-input: oklch(0.9155 0.0298 254.56);
+  --color-ring: oklch(0.5583 0.2296 262.24);
+  --radius: 0.5rem;
 
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: sans-serif;
-  background-color: black;
-  color: white;
+  /* ----------------------------------------------------------------------- */
+  /* Gray palette (needed for utilities like bg-gray-300 & dark:bg-gray-700) */
+  /* ----------------------------------------------------------------------- */
+  --color-gray-50:  oklch(0.98 0 0);
+  --color-gray-100: oklch(0.96 0 0);
+  --color-gray-200: oklch(0.90 0 0);
+  --color-gray-300: oklch(0.80 0 0);
+  --color-gray-400: oklch(0.70 0 0);
+  --color-gray-500: oklch(0.60 0 0);
+  --color-gray-600: oklch(0.45 0 0);
+  --color-gray-700: oklch(0.30 0 0);
+  --color-gray-800: oklch(0.20 0 0);
+  --color-gray-900: oklch(0.12 0 0);
+
+  --color-dark-background: oklch(0.0787 0.0328 263.32);
+  --color-dark-foreground: oklch(0.9804 0.0074 235.56);
+  --color-dark-card: oklch(0.0787 0.0328 263.32);
+  --color-dark-card-foreground: oklch(0.9804 0.0074 235.56);
+  --color-dark-popover: oklch(0.0787 0.0328 263.32);
+  --color-dark-popover-foreground: oklch(0.9804 0.0074 235.56);
+  --color-dark-primary: oklch(0.6098 0.2296 262.24);
+  --color-dark-primary-foreground: oklch(0.1216 0.0142 263.32);
+  --color-dark-secondary: oklch(0.6549 0.2481 289.03);
+  --color-dark-secondary-foreground: oklch(0.9804 0.0074 235.56);
+  --color-dark-muted: oklch(0.1765 0.0328 262.24);
+  --color-dark-muted-foreground: oklch(0.6529 0.0328 255.76);
+  --color-dark-accent: oklch(0.1765 0.0328 262.24);
+  --color-dark-accent-foreground: oklch(0.9804 0.0074 235.56);
+  --color-dark-destructive: oklch(0.3059 0.1559 22.18);
+  --color-dark-destructive-foreground: oklch(0.9804 0.0074 235.56);
+  --color-dark-border: oklch(0.1765 0.0328 262.24);
+  --color-dark-input: oklch(0.1765 0.0328 262.24);
+  --color-dark-ring: oklch(0.4804 0.2 264.32);
 }
 
-* {
-  box-sizing: border-box;
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Custom scrollbar styles */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-700 rounded-full;
+  }
+}
+
+/* Focus styles */
+@layer base {
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+/* Animation utilities */
+@layer utilities {
+  .animate-in {
+    animation-duration: 0.3s;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+  }
+  
+  .fade-in {
+    animation-name: fadeIn;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
 }

@@ -1,56 +1,52 @@
-'use client';
-import './globals.css'
-import { Inter } from 'next/font/google'
-import type { Metadata } from 'next'
-import { SessionProvider, useSession, signIn, signOut } from "next-auth/react";
+import type { Metadata, Viewport } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
 
 export const metadata: Metadata = {
-  title: 'CommandCore',
-  description: 'Autonomous AI war room',
-}
+  title: {
+    template: '%s | CommandCore',
+    default: 'CommandCore - AI-Powered SaaS Forge',
+  },
+  description: 'Bootstrap, build and scale SaaS products with AI-powered automation',
+  keywords: ['saas', 'automation', 'ai', 'development', 'software'],
+  authors: [{ name: 'CommandCore Team' }],
+  creator: 'CommandCore',
+  publisher: 'CommandCore',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+};
 
-function AuthButton() {
-  const { data: session, status } = useSession();
-  if (status === "loading") return null;
-  if (session) {
-    return (
-      <button
-        className="px-4 py-2 bg-gray-800 rounded hover:bg-gray-700"
-        onClick={() => signOut()}
-      >
-        Sign Out
-      </button>
-    );
-  }
-  return (
-    <button
-      className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
-      onClick={() => signIn()}
-    >
-      Sign In
-    </button>
-  );
-}
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
+  ],
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.className}>
-      <body className="min-h-screen bg-black text-white">
-        {/* Navbar */}
-        <nav className="w-full flex items-center justify-between px-8 py-4 bg-black/80 border-b border-gray-800">
-          <a href="/" className="text-2xl font-bold flex items-center gap-2">
-            <span>⚡</span> CommandCore
-          </a>
-          <AuthButton />
-        </nav>
-        <SessionProvider>{children}</SessionProvider>
+    <html lang="en" className={`${inter.variable}`}>
+      <body className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-50 antialiased">
+        <main className="flex min-h-screen flex-col">
+          {children}
+        </main>
       </body>
     </html>
-  )
+  );
 }
