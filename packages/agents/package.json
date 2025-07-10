@@ -1,0 +1,12 @@
+{
+  "name": "agents",
+  "version": "1.0.0",
+  "main": "dist/ideaSpider.js",
+  "types": "dist/ideaSpider.d.ts",
+  "dependencies": {
+    "openai": "^4.104.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.5"
+  }
+}
