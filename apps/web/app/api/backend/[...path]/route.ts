@@ -25,11 +25,14 @@ async function handle(req: NextRequest, params: { path: string[] }) {
     }
   });
   const body = method === "GET" ? undefined : await req.text();
-  const resp = await fetch(targetUrl, {
-    method,
-    headers,
-    body,
-  });
+
+  // Build fetch options without `body` when it's undefined to satisfy strict types
+  const fetchOptions: RequestInit = { method, headers };
+  if (body !== undefined) {
+    fetchOptions.body = body;
+  }
+
+  const resp = await fetch(targetUrl, fetchOptions);
   const data = await resp.text();
   return new NextResponse(data, {
     status: resp.status,
