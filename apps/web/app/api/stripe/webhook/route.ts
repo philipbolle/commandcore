@@ -5,16 +5,33 @@ import Stripe from "stripe";
 // levels to reach the repository root, then down to `generated/prisma`.
 import { PrismaClient } from "../../../../../../generated/prisma";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  // Align with the Stripe SDK version used elsewhere in the codebase
-  apiVersion: "2025-06-30.basil",
-});
-
 const prisma = new PrismaClient();
 
 // Disable default body parsing -- Next 14 route uses Web Streams so we manually decode
 
 export async function POST(req: NextRequest) {
+  /* ------------------------------------------------------------------
+   * Lazily create Stripe client. This avoids executing at build time
+   * (when env vars may be absent) and provides explicit error handling.
+   * ------------------------------------------------------------------ */
+  const stripeSecret = process.env.STRIPE_SECRET_KEY;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!stripeSecret || !webhookSecret) {
+    console.error(
+      "Stripe environment variables missing. " +
+        "Ensure STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET are set."
+    );
+    return NextResponse.json(
+      { error: "Server misconfiguration" },
+      { status: 500 }
+    );
+  }
+
+  const stripe = new Stripe(stripeSecret, {
+    // Keep SDK/api version consistent across codebase
+    apiVersion: "2025-06-30.basil",
+  });
+
   const sig = req.headers.get("stripe-signature");
   if (!sig) {
     return NextResponse.json({ error: "Missing signature" }, { status: 400 });
@@ -24,7 +41,7 @@ export async function POST(req: NextRequest) {
   try {
     const buf = await req.arrayBuffer();
     const text = new TextDecoder().decode(buf);
-    event = stripe.webhooks.constructEvent(text, sig, process.env.STRIPE_WEBHOOK_SECRET as string);
+    event = stripe.webhooks.constructEvent(text, sig, webhookSecret);
   } catch (err: any) {
     console.error("Webhook signature verification failed", err.message);
     return NextResponse.json({ error: "Webhook Error" }, { status: 400 });

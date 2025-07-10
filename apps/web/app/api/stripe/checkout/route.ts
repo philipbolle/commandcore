@@ -3,16 +3,28 @@ import Stripe from "stripe";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../lib/auth";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: "2025-06-30.basil",
-});
-
 const priceMap: Record<string, string | undefined> = {
   pro: process.env.STRIPE_PRICE_PRO,
   enterprise: process.env.STRIPE_PRICE_ENTERPRISE,
 };
 
 export async function POST(req: NextRequest) {
+  /* --------------------------------------------------------------
+   * Create Stripe client lazily so this file can be imported during
+   * Next.js build without requiring secret env vars to be present.
+   * -------------------------------------------------------------- */
+  const stripeSecret = process.env.STRIPE_SECRET_KEY;
+  if (!stripeSecret) {
+    console.error("Missing STRIPE_SECRET_KEY environment variable");
+    return NextResponse.json(
+      { error: "Server misconfiguration" },
+      { status: 500 },
+    );
+  }
+  const stripe = new Stripe(stripeSecret, {
+    apiVersion: "2025-06-30.basil",
+  });
+
   const body = await req.json();
   const plan: string = body.plan;
   const priceId = priceMap[plan];

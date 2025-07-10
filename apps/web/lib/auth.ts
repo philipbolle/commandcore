@@ -11,23 +11,37 @@ import type { AuthOptions } from "next-auth";
 const prisma = new PrismaClient();
 
 /**
- * Fetch a required environment variable or throw at startup.
- * Ensures values are non-undefined, satisfying strict typing.
+ * Detect when the file is being evaluated at build-time rather than at
+ * run-time.  During a production build the variable `NEXT_PHASE` is set to
+ * `"phase-production-build"`.  We also treat test environments as build-like
+ * to avoid hard failures in CI.
  */
-const requireEnv = (name: string): string => {
+const isBuildTime =
+  process.env.NEXT_PHASE === "phase-production-build" ||
+  process.env.NODE_ENV === "test";
+
+/**
+ * Fetch an environment variable.  If it is missing _and_ we are currently
+ * executing the file at build-time we return a harmless placeholder instead of
+ * throwing.  At run-time the variable **must** be present, otherwise we throw
+ * to surface the mis-configuration early.
+ */
+const getEnv = (name: string): string => {
   const value = process.env[name];
-  if (!value) {
-    throw new Error(`Environment variable "${name}" is required but not set`);
+  if (value) return value;
+  if (isBuildTime) {
+    // Return a deterministic placeholder so Next.js can finish the build.
+    return `__MISSING_${name}__`;
   }
-  return value;
+  throw new Error(`Environment variable "${name}" is required but not set`);
 };
 
 // Mandatory credentials
-const GOOGLE_CLIENT_ID = requireEnv("GOOGLE_CLIENT_ID");
-const GOOGLE_CLIENT_SECRET = requireEnv("GOOGLE_CLIENT_SECRET");
-const GITHUB_CLIENT_ID = requireEnv("GITHUB_CLIENT_ID");
-const GITHUB_CLIENT_SECRET = requireEnv("GITHUB_CLIENT_SECRET");
-const NEXTAUTH_SECRET = requireEnv("NEXTAUTH_SECRET");
+const GOOGLE_CLIENT_ID = getEnv("GOOGLE_CLIENT_ID");
+const GOOGLE_CLIENT_SECRET = getEnv("GOOGLE_CLIENT_SECRET");
+const GITHUB_CLIENT_ID = getEnv("GITHUB_CLIENT_ID");
+const GITHUB_CLIENT_SECRET = getEnv("GITHUB_CLIENT_SECRET");
+const NEXTAUTH_SECRET = getEnv("NEXTAUTH_SECRET");
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),

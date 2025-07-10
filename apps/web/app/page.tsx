@@ -16,22 +16,22 @@ export default function Home() {
             <Link href="#workflow" className="text-sm font-medium hover:text-primary-600">
               Workflow
             </Link>
-            <Link href="/pricing" className="text-sm font-medium hover:text-primary-600">
+            <Link href="#" className="text-sm font-medium hover:text-primary-600">
               Pricing
             </Link>
-            <Link href="/docs" className="text-sm font-medium hover:text-primary-600">
+            <Link href="#" className="text-sm font-medium hover:text-primary-600">
               Documentation
             </Link>
           </nav>
           <div className="flex items-center space-x-4">
             <Link 
-              href="/login" 
+              href="#" 
               className="text-sm font-medium px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               Sign in
             </Link>
             <Link 
-              href="/register" 
+              href="#" 
               className="text-sm font-medium px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
             >
               Get started
@@ -60,7 +60,7 @@ export default function Home() {
                   Start Building
                 </Link>
                 <Link 
-                  href="/docs" 
+                  href="#" 
                   className="px-8 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md text-center font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   View Documentation
@@ -186,7 +186,7 @@ export default function Home() {
             Join CommandCore today and transform your ideas into production-ready SaaS applications faster than ever before.
           </p>
           <Link 
-            href="/register" 
+            href="#" 
             className="px-8 py-3 bg-primary-600 text-white rounded-md text-center font-medium hover:bg-primary-700 transition-colors inline-block"
           >
             Get Started for Free
@@ -204,13 +204,13 @@ export default function Home() {
               </p>
             </div>
             <div className="flex space-x-6">
-              <Link href="/terms" className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
+              <Link href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
                 Terms
               </Link>
-              <Link href="/privacy" className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
+              <Link href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
                 Privacy
               </Link>
-              <Link href="/contact" className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
+              <Link href="#" className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
                 Contact
               </Link>
             </div>

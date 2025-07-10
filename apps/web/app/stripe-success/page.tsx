@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 
 export default function StripeSuccessPage() {
   const params = useSearchParams();
-  const sessionId = params.get("session_id");
+  // `params` can be null in strict mode, so guard access with optional chaining.
+  const sessionId = params?.get("session_id");
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("Processing your subscription...");
 

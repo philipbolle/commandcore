@@ -22,7 +22,7 @@ const Pricing = React.forwardRef<HTMLElement, PricingProps>(({ plans }, ref) => 
 
   const handleCheckout = async (plan: string, isFree: boolean) => {
     if (isFree) {
-      router.push("/signup");
+      router.push("/dashboard");
       return;
     }
     setLoadingPlan(plan);
