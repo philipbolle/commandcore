@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { useSession, signIn } from "next-auth/react";
 import { useSubscription } from "../../utils/useSubscription";
 
+// Disable static generation – this page must always be rendered dynamically
+// because it depends on authenticated session state available only at runtime.
+export const dynamic = 'force-dynamic';
+
 interface Idea {
   id: string
   title: string
@@ -16,7 +20,11 @@ interface Idea {
 }
 
 export default function DashboardPage() {
-  const { data: session, status } = useSession();
+  // `useSession()` can return `undefined` during the build/prerender phase,
+  // so we guard against that instead of destructuring directly.
+  const sessionCtx = useSession();
+  const session = sessionCtx?.data ?? null;
+  const status = sessionCtx?.status ?? "loading";
   const { data: sub } = useSubscription();
   if (status === "loading") {
     return <div className="min-h-screen flex items-center justify-center text-gray-400">Loading...</div>;

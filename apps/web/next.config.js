@@ -4,7 +4,6 @@ const nextConfig = {
   swcMinify: true,
   experimental: {
     serverComponentsExternalPackages: [],
-    optimizeCss: true,
     typedRoutes: true,
   },
   typescript: {
