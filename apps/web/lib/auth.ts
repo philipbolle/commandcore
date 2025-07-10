@@ -1,5 +1,7 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
+// Use the Prisma client generated to the custom output path configured in
+// prisma/schema.prisma (`output = "../generated/prisma"`).
+import { PrismaClient } from "../../../../generated/prisma";
 import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";

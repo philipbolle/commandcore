@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { PrismaClient } from "@prisma/client";
+// Use the generated Prisma client output path defined in prisma/schema.prisma
+import { PrismaClient } from "../../../../../../generated/prisma";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   // Align with the Stripe SDK version used elsewhere in the codebase

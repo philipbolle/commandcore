@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 // Centralized NextAuth configuration
 import { authOptions } from "../../../lib/auth";
-import { PrismaClient } from "@prisma/client";
+// Use the Prisma client generated to the custom output path configured in
+// prisma/schema.prisma (`output = "../generated/prisma"`).
+import { PrismaClient } from "../../../../generated/prisma";
 
 const prisma = new PrismaClient();
 
