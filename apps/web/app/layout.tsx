@@ -1,62 +1,52 @@
-import './globals.css'
-import { Inter } from 'next/font/google'
-import type { Metadata } from 'next'
-import ClientLayout from './ClientLayout'
-import Script from 'next/script'
+import type { Metadata, Viewport } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
 
 export const metadata: Metadata = {
   title: {
-    default: 'CommandCore – Autonomous AI SaaS Factory',
-    template: '%s | CommandCore'
+    template: '%s | CommandCore',
+    default: 'CommandCore - AI-Powered SaaS Forge',
   },
-  description: 'Generate, deploy and grow enterprise-grade SaaS products in days, not months.',
-  openGraph: {
-    title: 'CommandCore – Autonomous AI SaaS Factory',
-    description: 'Generate, deploy and grow enterprise-grade SaaS products in days, not months.',
-    url: 'https://commandcore.ai',
-    siteName: 'CommandCore',
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
+  description: 'Bootstrap, build and scale SaaS products with AI-powered automation',
+  keywords: ['saas', 'automation', 'ai', 'development', 'software'],
+  authors: [{ name: 'CommandCore Team' }],
+  creator: 'CommandCore',
+  publisher: 'CommandCore',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
   },
-  twitter: {
-    card: 'summary_large_image',
-    site: '@CommandCoreAI',
-    creator: '@CommandCoreAI',
-  },
-}
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
+  ],
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.className}>
-      <body className="min-h-screen bg-black text-white">
-        <ClientLayout>{children}</ClientLayout>
-        {process.env.NEXT_PUBLIC_GA_ID && (
-          <>
-            <Script src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} strategy="afterInteractive" />
-            <Script id="ga-setup" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);} 
-                gtag('js', new Date());
-                gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', { page_path: window.location.pathname });
-              `}
-            </Script>
-          </>
-        )}
+    <html lang="en" className={`${inter.variable}`}>
+      <body className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-50 antialiased">
+        <main className="flex min-h-screen flex-col">
+          {children}
+        </main>
       </body>
     </html>
-  )
+  );
 }

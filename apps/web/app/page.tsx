@@ -1,306 +1,223 @@
-"use client";
+import Link from 'next/link';
+import Image from 'next/image';
 
-// apps/web/app/page.tsx
-
-import React, { useState, useEffect, useRef } from "react";
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import IdeaPickerDemo from "./components/IdeaPickerDemo";
-import TrendingIdeas from "./components/TrendingIdeas";
-import Features from "./components/Features";
-import Testimonials from "./components/Testimonials";
-import Achievements from "./components/Achievements";
-import Pricing from "./components/Pricing";
-import FAQ from "./components/FAQ";
-
-const features = [
-  {
-    title: "AI-Powered Market Research",
-    description: "Analyze market gaps, competitor landscapes, and revenue potential using real-time data from 50+ sources.",
-    icon: "📊",
-    metric: "50+ data sources",
-  },
-  {
-    title: "Intelligent Code Generation",
-    description: "Generate production-ready SaaS applications with modern tech stacks, automated testing, and deployment pipelines.",
-    icon: "⚡",
-    metric: "15 min to MVP",
-  },
-  {
-    title: "Automated Growth Engine",
-    description: "Deploy, market, and optimize your SaaS with AI-driven analytics, A/B testing, and conversion optimization.",
-    icon: "🚀",
-    metric: "95% automation",
-  },
-];
-
-const processSteps = [
-  { step: "Market Analysis", time: "5 min", status: "completed", detail: "Analyzing market size, competition, and revenue potential" },
-  { step: "Product Strategy", time: "10 min", status: "completed", detail: "Defining feature set, pricing, and go-to-market strategy" },
-  { step: "MVP Development", time: "45 min", status: "in-progress", detail: "Generating codebase with React, Node.js, and PostgreSQL" },
-  { step: "Deployment", time: "15 min", status: "pending", detail: "Deploying to AWS with CI/CD pipeline" },
-  { step: "Launch & Optimize", time: "Ongoing", status: "pending", detail: "Marketing automation and performance optimization" },
-];
-
-const testimonials = [
-  {
-    name: "David Chen",
-    role: "CTO",
-    company: "TechFlow Solutions",
-    quote: "We reduced our MVP development time from 6 months to 2 weeks. The code quality is production-ready.",
-    avatar: "D",
-    metrics: { time: "2 weeks", cost: "80% less", quality: "Production-ready" },
-  },
-  {
-    name: "Sarah Williams",
-    role: "Product Manager",
-    company: "DataViz Analytics",
-    quote: "The market research capabilities are incredible. We identified a $50M opportunity we missed.",
-    avatar: "S",
-    metrics: { opportunity: "$50M", accuracy: "94%", speed: "5x faster" },
-  },
-  {
-    name: "Michael Rodriguez",
-    role: "Founder",
-    company: "CloudSync",
-    quote: "From idea to $25K MRR in 3 months. The automation handles everything we can't.",
-    avatar: "M",
-    metrics: { mrr: "$25K", time: "3 months", automation: "90%" },
-  },
-];
-
-const achievements = [
-  { name: "First Deployment", description: "Successfully deploy your first SaaS product", icon: "🚀", unlocked: true, progress: 100 },
-  { name: "Market Validation", description: "Achieve product-market fit with 100+ users", icon: "✅", unlocked: true, progress: 100 },
-  { name: "Revenue Milestone", description: "Generate $1K+ monthly recurring revenue", icon: "💰", unlocked: true, progress: 85 },
-  { name: "Scale Ready", description: "Optimize for 10x growth and expansion", icon: "📈", unlocked: false, progress: 60 },
-  { name: "Enterprise Ready", description: "Deploy enterprise-grade infrastructure", icon: "🏢", unlocked: false, progress: 0 },
-];
-
-const faqs = [
-  {
-    q: "How does CommandCore differ from no-code platforms?",
-    a: "Unlike no-code tools, CommandCore generates production-ready code with modern tech stacks, automated testing, and enterprise-grade infrastructure. You own your codebase and can customize everything.",
-  },
-  {
-    q: "What tech stack do you generate?",
-    a: "React/Next.js frontend, Node.js/Express backend, PostgreSQL database, AWS deployment, Docker containers, and automated CI/CD pipelines. All code is production-ready and follows industry best practices.",
-  },
-  {
-    q: "Can I customize the generated applications?",
-    a: "Absolutely. You have full access to the source code and can modify everything from UI components to business logic. Our AI can also help you extend functionality based on your requirements.",
-  },
-  {
-    q: "How do you ensure code quality and security?",
-    a: "All generated code follows industry standards with automated testing, security scanning, and best practices. We use enterprise-grade patterns and frameworks that scale to millions of users.",
-  },
-  {
-    q: "What's your pricing model?",
-    a: "Free during beta with full feature access. Future pricing will be usage-based with enterprise options for high-volume deployments.",
-  },
-];
-
-const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "Demo", href: "#demo" },
-  { label: "Features", href: "#features" },
-  { label: "Process", href: "#process" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "FAQ", href: "#faq" },
-];
-
-const saasIdeas = [
-  {
-    name: "AI Analytics Dashboard",
-    description: "A real-time dashboard for business metrics powered by AI.",
-    previewImg: "/public/globe.svg",
-    code: `// Next.js + Chart.js\nexport default function Dashboard() {\n  return <Chart data={...} />;\n}`,
-  },
-  {
-    name: "Subscription Billing",
-    description: "Automated billing and invoicing for SaaS products.",
-    previewImg: "/public/window.svg",
-    code: `// Node.js + Stripe\napp.post('/charge', ...);`,
-  },
-  {
-    name: "Team Collaboration Tool",
-    description: "A Slack-like chat and project management suite.",
-    previewImg: "/public/file.svg",
-    code: `// React + Socket.io\n<ChatRoom users={...} />`,
-  },
-];
-
-const pricingPlans = [
-  {
-    name: "Starter",
-    price: "$0",
-    description: "Full access during beta",
-    features: ["Unlimited ideas", "Community support", "Deployment automation"],
-    cta: "Join Free Beta",
-  },
-  {
-    name: "Pro",
-    price: "$99/mo",
-    description: "For growing startups",
-    features: ["Up to 3 active projects", "100k API calls", "Priority support"],
-  },
-  {
-    name: "Enterprise",
-    price: "Contact Us",
-    description: "Scale without limits",
-    features: ["Unlimited projects", "Custom infrastructure", "Dedicated support"],
-    cta: "Contact Sales",
-  },
-];
-
-export default function HomePage() {
-  const [showAuth, setShowAuth] = useState(false);
-  const [activeTab, setActiveTab] = useState("#home");
-  const [showOnboarding, setShowOnboarding] = useState(false);
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  // Section refs for smooth scroll and reveal
-  const sectionRefs = {
-    home: useRef<HTMLElement>(null),
-    demo: useRef<HTMLElement>(null),
-    features: useRef<HTMLElement>(null),
-    process: useRef<HTMLElement>(null),
-    pricing: useRef<HTMLElement>(null),
-    faq: useRef<HTMLElement>(null),
-  };
-
-  // Smooth scroll to section
-  const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    const id = href.replace("#", "");
-    sectionRefs[id as keyof typeof sectionRefs]?.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  // Active tab highlighting based on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      const offsets = Object.entries(sectionRefs).map(([id, ref]) => ({
-        id: `#${id}`,
-        top: ref.current?.getBoundingClientRect().top ?? 9999,
-      }));
-      const found = offsets.reduce((acc, curr) => (curr.top <= 80 ? curr.id : acc), "#home");
-      setActiveTab(found);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Section reveal on scroll
-  useEffect(() => {
-    const revealSections = () => {
-      Object.values(sectionRefs).forEach(ref => {
-        if (!ref.current) return;
-        const rect = ref.current.getBoundingClientRect();
-        if (rect.top < window.innerHeight - 100) {
-          ref.current.classList.add("section-visible");
-        }
-      });
-    };
-    window.addEventListener("scroll", revealSections, { passive: true });
-    revealSections();
-    return () => window.removeEventListener("scroll", revealSections);
-  }, []);
-
-  // Modal: close on ESC or background click, focus trap
-  useEffect(() => {
-    if (!showAuth) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setShowAuth(false);
-    };
-    document.addEventListener("keydown", handleKey);
-    // Focus trap
-    const focusable = modalRef.current?.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    const first = focusable?.[0];
-    const last = focusable?.[focusable.length - 1];
-    const trap = (e: KeyboardEvent) => {
-      if (e.key !== "Tab" || !focusable) return;
-      if (e.shiftKey) {
-        if (document.activeElement === first) {
-          e.preventDefault();
-          last?.focus();
-        }
-      } else {
-        if (document.activeElement === last) {
-          e.preventDefault();
-          first?.focus();
-        }
-      }
-    };
-    document.addEventListener("keydown", trap);
-    first?.focus();
-    return () => {
-      document.removeEventListener("keydown", handleKey);
-      document.removeEventListener("keydown", trap);
-    };
-  }, [showAuth]);
-
-  // Modal: close on background click
-  const handleModalBg = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) setShowAuth(false);
-  };
-
+export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white">
-      {/* Sticky Navbar */}
-      <Navbar navLinks={navLinks} activeTab={activeTab} handleNav={handleNav} />
-
-      {/* Mobile nav */}
-      <div className="flex md:hidden justify-center gap-4 py-2 bg-black bg-opacity-70 sticky top-[64px] z-40" aria-label="Mobile Navigation">
-        {navLinks.map((link) => (
-          <a
-            key={link.href}
-            href={link.href}
-            onClick={e => handleNav(e, link.href)}
-            className={`hover:text-blue-400 transition-colors cursor-pointer text-base px-2 py-1 rounded ${activeTab === link.href ? "bg-gradient-to-r from-blue-700 to-purple-700 text-white" : ""}`}
-            aria-current={activeTab === link.href ? "page" : undefined}
-            aria-label={link.label}
-          >
-            {link.label}
-          </a>
-        ))}
-        <a
-          href="/dashboard"
-          className="hover:text-blue-400 transition-colors cursor-pointer text-base px-2 py-1 rounded"
-          aria-label="Dashboard"
-        >
-          Dashboard
-        </a>
-      </div>
+    <div className="flex flex-col min-h-screen">
+      {/* Navigation */}
+      <header className="border-b border-gray-200 dark:border-gray-800">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="flex items-center">
+            <h1 className="text-xl font-bold">CommandCore</h1>
+          </div>
+          <nav className="hidden md:flex space-x-8">
+            <Link href="#features" className="text-sm font-medium hover:text-primary-600">
+              Features
+            </Link>
+            <Link href="#workflow" className="text-sm font-medium hover:text-primary-600">
+              Workflow
+            </Link>
+            <Link href="/pricing" className="text-sm font-medium hover:text-primary-600">
+              Pricing
+            </Link>
+            <Link href="/docs" className="text-sm font-medium hover:text-primary-600">
+              Documentation
+            </Link>
+          </nav>
+          <div className="flex items-center space-x-4">
+            <Link 
+              href="/login" 
+              className="text-sm font-medium px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              Sign in
+            </Link>
+            <Link 
+              href="/register" 
+              className="text-sm font-medium px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700"
+            >
+              Get started
+            </Link>
+          </div>
+        </div>
+      </header>
 
       {/* Hero Section */}
-      <Hero
-        ref={sectionRefs.home}
-        onStart={() => setShowOnboarding(true)}
-        onWatchDemo={() => sectionRefs.demo.current?.scrollIntoView({ behavior: "smooth" })}
-      />
+      <section className="py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-950 dark:to-gray-900">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col lg:flex-row items-center">
+            <div className="lg:w-1/2 lg:pr-12 mb-10 lg:mb-0">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                Build SaaS Products <span className="text-primary-600">Faster</span> with AI
+              </h1>
+              <p className="text-xl mb-8 text-gray-600 dark:text-gray-300">
+                CommandCore SaaS Forge automates your development workflow from idea to deployment, 
+                powered by advanced AI agents and LangGraph workflows.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link 
+                  href="/dashboard" 
+                  className="px-8 py-3 bg-primary-600 text-white rounded-md text-center font-medium hover:bg-primary-700 transition-colors"
+                >
+                  Start Building
+                </Link>
+                <Link 
+                  href="/docs" 
+                  className="px-8 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md text-center font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  View Documentation
+                </Link>
+              </div>
+            </div>
+            <div className="lg:w-1/2">
+              <div className="relative h-[400px] w-full rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800 shadow-lg">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-500/20 to-secondary-500/20 flex items-center justify-center">
+                  <div className="text-center p-8 bg-white/90 dark:bg-gray-900/90 rounded-lg shadow-sm">
+                    <h3 className="text-xl font-semibold mb-2">Platform Demo</h3>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Interactive preview coming soon
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      {/* Interactive Demo Section */}
-      <IdeaPickerDemo ref={sectionRefs.demo} ideas={saasIdeas} processSteps={processSteps} processRef={sectionRefs.process} />
+      {/* Features Section */}
+      <section id="features" className="py-20">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">Key Features</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Next.js 14 Frontend",
+                description: "Modern, fast, and SEO-friendly React framework with server components and app router.",
+                icon: "🚀"
+              },
+              {
+                title: "FastAPI Backend",
+                description: "High-performance Python 3.12 API with automatic OpenAPI documentation.",
+                icon: "⚡"
+              },
+              {
+                title: "LangGraph Workflows",
+                description: "Powerful AI agent workflows for automating complex development tasks.",
+                icon: "🧠"
+              },
+              {
+                title: "Database Integration",
+                description: "Prisma ORM with Postgres via Supabase for reliable data storage.",
+                icon: "🗄️"
+              },
+              {
+                title: "CI/CD Pipeline",
+                description: "GitHub Actions for testing, building, and deploying to Vercel and Railway.",
+                icon: "🔄"
+              },
+              {
+                title: "Monorepo Structure",
+                description: "Efficient code organization with pnpm workspaces for better development.",
+                icon: "📦"
+              }
+            ].map((feature, index) => (
+              <div key={index} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+                <div className="text-3xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      {/* Trending Ideas fetched live */}
-      <TrendingIdeas />
+      {/* Workflow Section */}
+      <section id="workflow" className="py-20 bg-gray-50 dark:bg-gray-900">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">Development Workflow</h2>
+          <div className="max-w-3xl mx-auto">
+            <div className="space-y-8">
+              {[
+                {
+                  step: "1",
+                  title: "Define Your SaaS Concept",
+                  description: "Specify your product requirements and target audience."
+                },
+                {
+                  step: "2",
+                  title: "AI-Powered Scaffolding",
+                  description: "Our agents automatically generate the initial codebase structure."
+                },
+                {
+                  step: "3",
+                  title: "Customize & Extend",
+                  description: "Modify the generated code to fit your specific business needs."
+                },
+                {
+                  step: "4",
+                  title: "Test & Deploy",
+                  description: "Utilize our CI/CD pipeline for testing and seamless deployment."
+                },
+                {
+                  step: "5",
+                  title: "Monitor & Scale",
+                  description: "Track performance and scale your SaaS product as it grows."
+                }
+              ].map((item, index) => (
+                <div key={index} className="flex">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white font-bold">
+                    {item.step}
+                  </div>
+                  <div className="ml-4">
+                    <h3 className="text-xl font-semibold">{item.title}</h3>
+                    <p className="text-gray-600 dark:text-gray-300 mt-1">{item.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
-      {/* Features */}
-      <Features ref={sectionRefs.features} features={features} />
+      {/* CTA Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-6">Ready to Build Your SaaS Product?</h2>
+          <p className="text-xl mb-8 max-w-2xl mx-auto text-gray-600 dark:text-gray-300">
+            Join CommandCore today and transform your ideas into production-ready SaaS applications faster than ever before.
+          </p>
+          <Link 
+            href="/register" 
+            className="px-8 py-3 bg-primary-600 text-white rounded-md text-center font-medium hover:bg-primary-700 transition-colors inline-block"
+          >
+            Get Started for Free
+          </Link>
+        </div>
+      </section>
 
-      {/* Testimonials */}
-      <Testimonials testimonials={testimonials} />
-
-      {/* Achievements */}
-      <Achievements achievements={achievements} />
-
-      {/* Pricing */}
-      <Pricing ref={sectionRefs.pricing} plans={pricingPlans} />
-
-      {/* FAQ */}
-      <FAQ ref={sectionRefs.faq} faqs={faqs} />
+      {/* Footer */}
+      <footer className="mt-auto py-8 border-t border-gray-200 dark:border-gray-800">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="mb-4 md:mb-0">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                © {new Date().getFullYear()} CommandCore. All rights reserved.
+              </p>
+            </div>
+            <div className="flex space-x-6">
+              <Link href="/terms" className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
+                Terms
+              </Link>
+              <Link href="/privacy" className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
+                Privacy
+              </Link>
+              <Link href="/contact" className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100">
+                Contact
+              </Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
