@@ -32,7 +32,9 @@ export async function POST(req: NextRequest) {
           quantity: 1,
         },
       ],
-      customer_email: session?.user?.email ?? undefined,
+      // Only include customer_email when it actually exists to satisfy
+      // exactOptionalPropertyTypes and Stripe type definitions.
+      ...(session?.user?.email ? { customer_email: session.user.email } : {}),
       metadata: { plan },
       success_url: `${req.headers.get("origin")}/stripe-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.get("origin")}/pricing`,
