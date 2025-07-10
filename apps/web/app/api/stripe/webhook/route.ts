@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-// Use the generated Prisma client output path defined in prisma/schema.prisma
+// Use the generated Prisma client output path defined in prisma/schema.prisma.
+// From this file (`apps/web/app/api/stripe/webhook/route.ts`) we go up seven
+// levels to reach the repository root, then down to `generated/prisma`.
 import { PrismaClient } from "../../../../../../generated/prisma";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
@@ -65,7 +67,11 @@ export async function POST(req: NextRequest) {
         where: { stripeSubscriptionId: sub.id },
         data: {
           status: sub.status ?? "unknown",
-          currentPeriodEnd: new Date((sub.current_period_end ?? 0) * 1000),
+          // With API version 2025-06-30.basil the period fields moved to the
+          // first subscription-item.  Safely read it and convert to JS Date.
+          currentPeriodEnd: new Date(
+            ((sub.items?.data?.[0]?.current_period_end ?? 0) as number) * 1000,
+          ),
         },
       });
       break;

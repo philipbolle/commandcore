@@ -1,5 +1,5 @@
 import { getServerSession as nextAuthGetServerSession } from "next-auth/next";
-import { authOptions } from "../app/api/auth/[...nextauth]/route";
+import { authOptions } from "../lib/auth";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export function getServerSession(req?: NextApiRequest, res?: NextApiResponse) {

@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react'
 import { useSession, signIn } from "next-auth/react";
-import Link from "next/link";
 import { useSubscription } from "../../utils/useSubscription";
 
 interface Idea {

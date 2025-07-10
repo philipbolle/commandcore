@@ -3,8 +3,9 @@ import { getServerSession } from "next-auth";
 // Centralized NextAuth configuration
 import { authOptions } from "../../../lib/auth";
 // Use the Prisma client generated to the custom output path configured in
-// prisma/schema.prisma (`output = "../generated/prisma"`).
-import { PrismaClient } from "../../../../generated/prisma";
+// prisma/schema.prisma (`output = "../generated/prisma"`). From this file we
+// need to go up five levels (../../../../../) to reach the repository root.
+import { PrismaClient } from "../../../../../generated/prisma";
 
 const prisma = new PrismaClient();
 
